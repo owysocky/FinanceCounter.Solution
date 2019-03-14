@@ -162,7 +162,11 @@ namespace FinanceCounter.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = "SELECT total FROM incomeCategories;";
+      cmd.CommandText = "SELECT total FROM incomeCategories WHERE account_id = @account_id;";
+      MySqlParameter accountId = new MySqlParameter();
+      accountId.ParameterName = "@account_id";
+      accountId.Value = this._id;
+      cmd.Parameters.Add(accountId);
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       while(rdr.Read())
       {
@@ -178,7 +182,11 @@ namespace FinanceCounter.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = "SELECT price FROM expenseItems;";
+      cmd.CommandText = "SELECT total FROM expenseCategories WHERE account_id = @account_id;";
+      MySqlParameter accountId = new MySqlParameter();
+      accountId.ParameterName = "@account_id";
+      accountId.Value = this._id;
+      cmd.Parameters.Add(accountId);
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       while(rdr.Read())
       {
@@ -190,9 +198,27 @@ namespace FinanceCounter.Models
 
     public double GetBalance()
     {
-      double balance =  GetTotalIncome() - GetTotalExpense();
-      _balance = balance;
-      return balance;
+      double updatedbalance =  this.GetTotalIncome() - this.GetTotalExpense();
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"UPDATE accounts SET balance = @newBalance WHERE id = @searchId;";
+      MySqlParameter searchId = new MySqlParameter();
+      searchId.ParameterName = "@searchId";
+      searchId.Value = this._id;
+      cmd.Parameters.Add(searchId);
+      MySqlParameter balance = new MySqlParameter();
+      balance.ParameterName = "@newBalance";
+      balance.Value = updatedbalance;
+      cmd.Parameters.Add(balance);
+      cmd.ExecuteNonQuery();
+      _balance = updatedbalance;
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return updatedbalance;
     }
 //====================== <<<<<<< For Balance ===============
 

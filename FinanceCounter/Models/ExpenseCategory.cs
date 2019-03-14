@@ -139,7 +139,7 @@ namespace FinanceCounter.Models
 
     public double GetTotal()
     {
-      double total = 0;
+      double updatedtotal = 0;
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
@@ -152,10 +152,23 @@ namespace FinanceCounter.Models
       while(rdr.Read())
       {
         double expenseItemPrice = rdr.GetDouble(0);
-        total += expenseItemPrice;
+        updatedtotal += expenseItemPrice;
       }
-      this._total = total;
-      return total;
+      conn.Close();
+      conn.Open();
+      cmd.CommandText = "UPDATE expenseCategories SET total = @newTotal WHERE id = @searchId;";
+      MySqlParameter total = new MySqlParameter();
+      total.ParameterName = "@newTotal";
+      total.Value = updatedtotal;
+      cmd.Parameters.Add(total);
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      this._total = updatedtotal;
+      return updatedtotal;
     }
 
     public void Delete()
