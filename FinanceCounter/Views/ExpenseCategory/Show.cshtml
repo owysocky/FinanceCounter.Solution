@@ -50,8 +50,8 @@
         </div>
     </nav>
     <div id="incomeShow">
-    <h2>Details of @Model["expenseCategory"].GetName() in @Model["account"].GetName()</h2>
-    <h3>Expenses in @Model["expenseCategory"].GetName() Total: $@Model["expenseCategory"].GetTotal()</h3>
+    <h2>Details of @Model["expenseCategory"].GetName()</h2>
+    <h3>Total: $@Model["expenseCategory"].GetTotal()</h3>
     <h4>Item(s):</h4>
     <ol>
     @foreach (var item in @Model["categoryItems"])

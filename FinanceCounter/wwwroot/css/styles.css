@@ -162,8 +162,16 @@ a.article:hover {
 }
 
 #accountIndex a {
+  color: white;
   text-decoration: underline;
-  color: blue;
+}
+
+.panel-headercustom {
+  background-color: #92ddc8;
+}
+
+#accountShow h4 {
+  color:white;
 }
 /* ---------------------------------------------------
     MEDIAQUERIES

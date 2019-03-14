@@ -53,15 +53,22 @@
     <h2>Accounts List</h2>
       @if (Model.Count != 0)
       {
-          <ul>
+      <div class="row">
+
           @foreach (var account in Model)
           {
-              <li><a href="/accounts/@account.GetId()">@account.GetName()</a></li>
+          <div class="col-md-3">
+              <div class="panel">
+                <div class="panel-heading panel-headercustom"><h4><a href="/accounts/@account.GetId()">@account.GetName()</a></h4></div>
+                <div class="panel-body"><h5>Balance: $@account.GetBalance()</h5></div>
+              </div>
+          </div>
           }
-          </ul>
-          <form action="/accounts/deleteall" method="post">
-            <button type="submit" class="addbtn">Delete all account(s)</button>
-          </form><br><br>
+
+      </div>
+        <form action="/accounts/deleteall" method="post">
+          <button type="submit" class="addbtn">Delete all account(s)</button>
+        </form><br><br>
       }
       @if (Model.Count == 0)
       {
